@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Posting - Login Test</title>
+    <title>Job Posting</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .login-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
@@ -20,15 +20,15 @@
 </head>
 <body>
     <div class="login-card">
-        <h2>Cloud Login Test</h2>
+        <h2>Login Test</h2>
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required value="test10@gmail.com">
+                <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required value="test10">
+                <input type="password" id="password" name="password" required>
             </div>
             <button type="submit">Login</button>
         </form>
