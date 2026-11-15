@@ -91,4 +91,65 @@ class User {
         return json_encode(['success' => false, 'message' => 'Failed to update profile.']);
     }
 }
+
+if (isset($_GET['op']) && $_GET['op'] == 'login') {
+    header('Content-Type: application/json');
+    
+    // Siguraduhing tama ang path ng Database.php kung nasaan man ito nakalagay
+    include_once 'Database.php'; 
+    
+    $database = new Database();
+    $db = $database->getConnection();
+    
+    $user = new User($db);
+
+    // Basahin ang JSON data na ipinadala mula sa Postman Body
+    $data = json_decode(file_get_contents("php://input"), true);
+    
+    $email = $data['email'] ?? '';
+    $password = $data['password'] ?? '';
+
+    if (!empty($email) && !empty($password)) {
+        // Tuwirang tawagin ang login function dahil nagbabalik na ito ng JSON response string
+        echo $user->login($email, $password);
+    } else {
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Please provide email and password'
+        ]);
+    }
+}else if (isset($_GET['op']) && $_GET['op'] == 'register') {
+    header('Content-Type: application/json');
+    
+    include_once 'Database.php'; 
+    
+    $database = new Database();
+    $db = $database->getConnection();
+    
+    $user = new User($db);
+
+    // Basahin ang JSON data na ipinadala mula sa Postman Body
+    $data = json_decode(file_get_contents("php://input"), true);
+    
+    $email = $data['email'] ?? '';
+    $password = $data['password'] ?? '';
+    $role = $data['role'] ?? 'Applicant';
+    $firstname = $data['firstname'] ?? '';
+    $lastname = $data['lastname'] ?? '';
+    $middlename = $data['middlename'] ?? '';
+    $birthdate = $data['birthdate'] ?? '';
+    $gender = $data['gender'] ?? '';
+    $address = $data['address'] ?? '';
+    $contact = $data['contact'] ?? '';
+
+    if (!empty($email) && !empty($password)) {
+        // Tawagin ang register method mula sa User class
+        echo $user->register($email, $password, $role, $firstname, $lastname, $middlename, $birthdate, $gender, $address, $contact);
+    } else {
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Please provide email and password'
+        ]);
+    }
+}
 ?>
