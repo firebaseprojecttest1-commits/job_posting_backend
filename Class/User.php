@@ -1,4 +1,9 @@
 <?php
+// Pigilan ang mga direct warnings na masira ang JSON output
+ini_set('display_errors', 0);
+error_reporting(0);
+header('Content-Type: application/json');
+
 class User {
     private $conn;
 
@@ -93,9 +98,6 @@ class User {
 }
 
 if (isset($_GET['op']) && $_GET['op'] == 'login') {
-    header('Content-Type: application/json');
-    
-    // Siguraduhing tama ang path ng Database.php kung nasaan man ito nakalagay
     include_once 'Database.php'; 
     
     $database = new Database();
@@ -103,14 +105,12 @@ if (isset($_GET['op']) && $_GET['op'] == 'login') {
     
     $user = new User($db);
 
-    // Basahin ang JSON data na ipinadala mula sa Postman Body
     $data = json_decode(file_get_contents("php://input"), true);
     
     $email = $data['email'] ?? '';
     $password = $data['password'] ?? '';
 
     if (!empty($email) && !empty($password)) {
-        // Tuwirang tawagin ang login function dahil nagbabalik na ito ng JSON response string
         echo $user->login($email, $password);
     } else {
         echo json_encode([
@@ -118,9 +118,7 @@ if (isset($_GET['op']) && $_GET['op'] == 'login') {
             'message' => 'Please provide email and password'
         ]);
     }
-}else if (isset($_GET['op']) && $_GET['op'] == 'register') {
-    header('Content-Type: application/json');
-    
+} else if (isset($_GET['op']) && $_GET['op'] == 'register') {
     include_once 'Database.php'; 
     
     $database = new Database();
@@ -128,7 +126,6 @@ if (isset($_GET['op']) && $_GET['op'] == 'login') {
     
     $user = new User($db);
 
-    // Basahin ang JSON data na ipinadala mula sa Postman Body
     $data = json_decode(file_get_contents("php://input"), true);
     
     $email = $data['email'] ?? '';
@@ -143,7 +140,6 @@ if (isset($_GET['op']) && $_GET['op'] == 'login') {
     $contact = $data['contact'] ?? '';
 
     if (!empty($email) && !empty($password)) {
-        // Tawagin ang register method mula sa User class
         echo $user->register($email, $password, $role, $firstname, $lastname, $middlename, $birthdate, $gender, $address, $contact);
     } else {
         echo json_encode([
