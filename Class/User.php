@@ -4,6 +4,16 @@ ini_set('display_errors', 0);
 error_reporting(0);
 header('Content-Type: application/json');
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Para sa preflight OPTIONS request ng browser
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 class User {
     private $conn;
 
