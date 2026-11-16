@@ -100,25 +100,30 @@ class User {
 if (isset($_GET['op']) && $_GET['op'] == 'login') {
     include_once 'Database.php'; 
     
-    $database = new Database();
-    $db = $database->getConnection();
-    
-    $user = new User($db);
+    try {
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        if (!$db) {
+            echo json_encode(['success' => false, 'message' => 'Database object is null']);
+            exit;
+        }
+        
+        $user = new User($db);
+        $data = json_decode(file_get_contents("php://input"), true);
+        
+        $email = $data['email'] ?? '';
+        $password = $data['password'] ?? '';
 
-    $data = json_decode(file_get_contents("php://input"), true);
-    
-    $email = $data['email'] ?? '';
-    $password = $data['password'] ?? '';
-
-    if (!empty($email) && !empty($password)) {
-        echo $user->login($email, $password);
-    } else {
-        echo json_encode([
-            'success' => false, 
-            'message' => 'Please provide email and password'
-        ]);
+        if (!empty($email) && !empty($password)) {
+            echo $user->login($email, $password);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Please provide email and password']);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Exception: ' . $e->getMessage()]);
     }
-} else if (isset($_GET['op']) && $_GET['op'] == 'register') {
+}else if (isset($_GET['op']) && $_GET['op'] == 'register') {
     include_once 'Database.php'; 
     
     $database = new Database();
